@@ -1,8 +1,6 @@
 import requests
-# - requests is NOT built-in; it’s a third-party library used to make HTTP requests
-
 import json
-# - json is built-in; provides functions for parsing (and generating) JSON data
+
 
 def emotion_detector(text_to_analyze):
     # Define the API endpoint URL
@@ -22,6 +20,19 @@ def emotion_detector(text_to_analyze):
     # - json=myobj tells requests to serialize myobj to a JSON request body
     # - headers=header attaches our model-selection header
     response = requests.post(url, json=myobj, headers=header)
+
+    # Handle blank input or error response from the API
+    # - response.status_code is NOT built-in; it's an attribute of the requests.Response object
+    # - if status is 400, return a dictionary with None values
+    if response.status_code == 400:
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
 
     # Parse the raw JSON string from the response into a Python dict
     # - response.text is NOT built-in; it’s an attribute of the requests.Response object
